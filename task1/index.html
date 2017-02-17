@@ -33,6 +33,12 @@
 			transition: 0.1s ease-out;
 
 		}
+    a:visited{
+      color: #000;
+    }
+    a{
+      text-decoration: none;
+    }
 		a:hover{
 			box-shadow: 0 0 12px #333;
 		}
@@ -45,7 +51,7 @@
 	<h1>Многоугольник, где каждая следующая точка, левее предыдущей</h1>
 	<div>
 		<canvas id="canvas" width="810" height="810"></canvas>
-		<a id='reload'>Обновить</a>
+		<a href="#" id='reload'>Обновить</a href="#">
 	</div>
 </body>
 	<script type="text/javascript" src='index.js'></script>
