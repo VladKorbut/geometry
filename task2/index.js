@@ -32,8 +32,11 @@
 	}
 
 	function drawPoint(point){
-		ctx.fillStyle = '#f00';
-		ctx.fillRect(point.x,point.y,8,8);
+		ctx.strokeStyle = '#f00';
+		ctx.beginPath();
+		ctx.arc(point.x, point.y, 2, 0, 360);
+		ctx.stroke();
+
 	}
 
 	function drawRay(point1, point2){
