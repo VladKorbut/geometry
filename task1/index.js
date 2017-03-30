@@ -1,10 +1,9 @@
-'use strict';
 (function(){
 	function rand(min, max){
 		return Math.floor(Math.random() * (max - min) + min);
 	}
 	function init(){
-		return rand(5, document.getElementById('canvas').getAttribute('width')-5)
+		return rand(0, document.getElementById('canvas').getAttribute('width'))
 	}
 	function det(x1,x2,y1,y2){
 		return x1*y2-x2*y1;

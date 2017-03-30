@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		body{
+			margin: 0;
+		}
+		h1{
+			margin: 0;
+			text-align: center;
+		}
+		div{
+			margin: 0;
+			width: calc(100% - 27px);
+			height: 100%;
+			position: fixed;
+		    top: 0;
+		    left: 0;
+			display: flex;
+		    align-items: center;
+		    justify-content: space-around; 
+		    overflow: auto;   
+		}
+		canvas{
+			box-shadow: 0 0 5px #777;
+		}
+		a{
+			cursor: pointer;
+			display: block;
+			padding: 10px;
+			box-shadow: 0 0 8px #333;
+			transition: 0.1s ease-out;
+
+		}
+    a:visited{
+      color: #000;
+    }
+    a{
+      text-decoration: none;
+    }
+	a:hover{
+		box-shadow: 0 0 12px #333;
+	}
+	a:active{
+		box-shadow: 0 0 8px #333;
+	}
+	</style>
+</head>
+<body>
+	<h1>Принадлежность точки многоугольнику(Лучевой и габаритный тест)</h1>
+	<div>
+		<canvas id="canvas" width="810" height="810"></canvas>
+		<h2 id='result'></h2>
+	</div>
+</body>
+	<script type="text/javascript" src='index.js'></script>
+</html>
