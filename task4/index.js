@@ -47,6 +47,20 @@
 		ctx.stroke();
 	}
 
+	function drawPoints(points){
+		ctx.beginPath();
+		points.forEach(function(item, index, arr){
+			ctx.font = "1em Arial";
+			ctx.fillStyle = '#11bb11';
+			ctx.strokeStyle="#000";
+			//ctx.fillText(index,item.x,item.y);
+			ctx.moveTo(item.x, item.y);
+			ctx.arc(item.x, item.y, 1, 0, 360);
+		});
+		ctx.closePath();
+		ctx.stroke();
+	}
+
 	function drawRays(point1, point2) {
 		ctx.beginPath();
 		ctx.lineTo(point1.x, point1.y);
@@ -164,21 +178,21 @@
 			}
 			++i;
 			clear();
-			drawPolygon(points);
-			drawRedPolygon(res)
-		},1000)
+			drawPoints(points);
+			drawPolygon(res)
+		},400)
 		
 		return res;
 	}
 
 	var points = [];
 	var container = [];
-	for(var i=0;i<8;++i){
+	for(var i=0;i<15;++i){
 		points.push(randPoint());
 	}
 	replaceFirstPoint(points);
 	points = sortByAngle(points);
-	drawPolygon(points);
+	drawPoints(points);
 	graham(points)
 
 
