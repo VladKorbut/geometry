@@ -142,7 +142,7 @@
 	}
 
 
-	function make(points) {
+	function graham(points) {
 		var res = [];
 		res.push(points[0]);
 		res.push(points[1]);
@@ -177,12 +177,9 @@
 		points.push(randPoint());
 	}
 	replaceFirstPoint(points);
-	//drawPolygon(points);
-	points = sortByAngle(points); 
-	make(points)
-	//points = sortByX(points); 
-	//drawPolygon(points);
-	//drawRedPolygon(make(points));
+	points = sortByAngle(points);
+	drawPolygon(points);
+	graham(points)
 
 
 	
