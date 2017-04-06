@@ -15,14 +15,17 @@
 			}
 	}
 
-	
+	function clear(){
+		ctx.clearRect(0, 0, c.width, c.height);
+		ctx.beginPath();
+		ctx.moveTo(0,0);
+		ctx.closePath();
+	}
+
 	function drawRedPolygon(points){
 		ctx.beginPath();
 		points.forEach(function(item, index, arr){
-			ctx.font = "1em Arial";
-			ctx.fillStyle = '#11bb11';
 			ctx.strokeStyle="#FF0000";
-			ctx.fillText(index,item.x,item.y);
 			ctx.lineTo(item.x, item.y);
 
 		});
@@ -51,7 +54,7 @@
 		ctx.closePath();
 		ctx.stroke();
 	}
-
+	//найти самую нижнюю точку
 	function findBottomPointPosition(points){
 		var min = 0;
 		points.forEach(function(item, i, arr) {
@@ -61,18 +64,18 @@
 		})
 		return min;
 	}
-
+	//поставить нижнюю точку в начало списка
 	function replaceFirstPoint(points) {
 		var pos = findBottomPointPosition(points);
 		var tmp = points[pos];
 		points[pos] = points[0];
 		points[0] = tmp;
 	}
-
+	//векторное произведение
 	function vectorMult(point1, point2){
 		return point1.x * point2.x - point1.y+point2.y;
 	}
-
+	//модуль вектора(длинна)
 	function vectLenght(point){
 		return Math.sqrt(vectorMult(point, point));
 	}
@@ -138,23 +141,33 @@
 		return (sideOfPoint(determ));
 	}
 
+
 	function make(points) {
 		var res = [];
 		res.push(points[0]);
 		res.push(points[1]);
-		for(var i=2;i<points.length;++i){
-			console.log(res);
-			var line = [
-				{x:res[res.length-2].x,y:res[res.length-2].y},
-				{x:res[res.length-1].x,y:res[res.length-1].y}
-			];
-			if(lineMinusPointSide(line, points[i]) == -1){
-				res.push(points[i]);
-			}else{
-				res.pop();
-				--i;
+		i=2;
+		setInterval(function() {
+			if(i<points.length){
+				console.log(res);
+				var line = [
+					{x:res[res.length-2].x,y:res[res.length-2].y},
+					{x:res[res.length-1].x,y:res[res.length-1].y}
+				];
+				if(lineMinusPointSide(line, points[i]) == -1){
+					res.push(points[i]);
+				}else{
+					res.pop();
+					--i;
+				}
+				console.log(res);
 			}
-		}
+			++i;
+			clear();
+			drawPolygon(points);
+			drawRedPolygon(res)
+		},1000)
+		
 		return res;
 	}
 
@@ -166,9 +179,10 @@
 	replaceFirstPoint(points);
 	//drawPolygon(points);
 	points = sortByAngle(points); 
+	make(points)
 	//points = sortByX(points); 
-	drawPolygon(points);
-	drawRedPolygon(make(points));
+	//drawPolygon(points);
+	//drawRedPolygon(make(points));
 
 
 	
