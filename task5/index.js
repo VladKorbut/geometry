@@ -73,9 +73,15 @@
 	function findBottomPointPosition(points){
 		var min = 0;
 		points.forEach(function(item, i, arr) {
-			if(arr[min].y < item.y){
+			if(arr[min].y <= item.y){
+				if(arr[min].y == item.y){
+					if(arr[min].x > item.x){
+						min = i;
+					}
+				}
 				min = i;
 			}
+			
 		})
 		return min;
 	}
