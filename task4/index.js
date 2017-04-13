@@ -98,7 +98,6 @@
 		var ONE_RADIAN = 57.295779513082;
         var deltaX, deltaY;
 
-        //if the points are undefined, return a zero difference angle.
         if (!a || !b) return 0;
 
         deltaX = (b.x - a.x);
@@ -163,7 +162,6 @@
 		i=2;
 		setInterval(function() {
 			if(i<points.length){
-				console.log(res);
 				var line = [
 					{x:res[res.length-2].x,y:res[res.length-2].y},
 					{x:res[res.length-1].x,y:res[res.length-1].y}
@@ -174,12 +172,11 @@
 					res.pop();
 					--i;
 				}
-				console.log(res);
 			}
 			++i;
 			clear();
 			drawPoints(points);
-			drawPolygon(res)
+			drawPolygon(res);
 		},400)
 		
 		return res;
@@ -187,13 +184,14 @@
 
 	var points = [];
 	var container = [];
-	for(var i=0;i<15;++i){
+	for(var i=0;i<200;++i){
 		points.push(randPoint());
 	}
 	replaceFirstPoint(points);
 	points = sortByAngle(points);
+
 	drawPoints(points);
-	graham(points)
+	graham(points);
 
 
 	

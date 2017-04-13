@@ -3,15 +3,17 @@
 	var c = document.getElementById('canvas');
 	var ctx = c.getContext('2d');
 
-	
+	const MAX_PERIM = 1500;
+	const ONE_RADIAN = 57.295779513082;
+	const PI = 3.141592653589793238462643;
 
 	function rand(min, max){
 		return Math.floor(Math.random() * (max - min) + min);
 	}
 
 	function randPoint(){
-		return {x: rand(200, document.getElementById('canvas').getAttribute('width')-200),
-				y: rand(200, document.getElementById('canvas').getAttribute('width')-200)
+		return {x: rand(0+200, document.getElementById('canvas').getAttribute('width')-200),
+				y: rand(0+200, document.getElementById('canvas').getAttribute('height')-200)
 			}
 	}
 
@@ -53,7 +55,7 @@
 			ctx.font = "1em Arial";
 			ctx.fillStyle = '#11bb11';
 			ctx.strokeStyle="#000";
-			//ctx.fillText(index,item.x,item.y);
+			ctx.fillText(index,item.x,item.y);
 			ctx.moveTo(item.x, item.y);
 			ctx.arc(item.x, item.y, 1, 0, 360);
 		});
@@ -94,7 +96,6 @@
 	}
 
 	function calcAngle(a, b) {
-		var ONE_RADIAN = 57.295779513082;
         var deltaX, deltaY;
 
         if (!a || !b) return 0;
@@ -199,13 +200,35 @@
 		return mov;
 	}
 
+	function changeDirection(mov) {
+		return mov.map(function(item) {
+			return item + PI ;
+		})
+	}
+
+	function checkDiam(hull) {
+		hull.forEach(function(item, i, arr) {
+			
+		})
+	}
+
+	function checkPerim(hull) {
+		var perim = 0;
+		hull.forEach(function(item, i, arr) {
+			var x = arr[i%arr.length].x - arr[(i+1)%arr.length].x;
+			var y = arr[i%arr.length].y - arr[(i+1)%arr.length].y;
+			perim += Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+		});
+		return perim;
+	}
+
 	function radian(angle) {
 		const pi = 3.14159265359;
 		return angle * pi / 180;
 	}
 	var points = [];
 	var container = [];
-	for(var i=0;i<20;++i){
+	for(var i=0;i<7;++i){
 		points.push(randPoint());
 	}
 	drawPoints(points);
@@ -217,7 +240,13 @@
 		points = movePoints(points);
 		clear();
 		drawPoints(points);
-		drawPolygon(jarvis(points));
+		var jar = jarvis(points);
+		drawPolygon(jar);
+		if(checkPerim(jar) > MAX_PERIM){
+			console.log(changeDirection(mov));
+			mov = changeDirection(mov);
+			//clearInterval(timer);
+		}
 	}, 1000 / fps);
 
 
