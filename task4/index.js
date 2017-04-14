@@ -177,14 +177,14 @@
 			clear();
 			drawPoints(points);
 			drawPolygon(res);
-		},400)
+		},100)
 		
 		return res;
 	}
 
 	var points = [];
 	var container = [];
-	for(var i=0;i<200;++i){
+	for(var i=0;i<50;++i){
 		points.push(randPoint());
 	}
 	replaceFirstPoint(points);
