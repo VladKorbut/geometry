@@ -3,6 +3,7 @@
 	var c = document.getElementById('canvas');
 	var ctx = c.getContext('2d');
 
+
 	const MAX_PERIM = 1500;
 	const ONE_RADIAN = 57.295779513082;
 	const PI = 3.141592653589793238462643;
@@ -212,10 +213,49 @@
 		})
 	}
 
-	function checkDiam(hull) {
-		hull.forEach(function(item, i, arr) {
+	function triangle_area(first, second, third) {
+	    let a = distance(first, second);
+	    let b = distance(second, third);
+	    let c = distance(first, third);
+	    let p = (a + b + c) / 2;
+
+	    return Math.sqrt(p * (p - a) * (p - b) * (p - c));
+	}
+
+	function findDiam(figure) {
+		let n = figure.length - 1, i = 1, end, start, temp;
+		let resLength = 0;
+		while(Math.abs(triangle_area(figure[n - 1], figure[0], figure[i])) > Math.abs(triangle_area(figure[n - 1], figure[0], figure[i - 1]))) {
+			i++;
+		}
+
+		start = i - 1;
+		let j = 1;
+		while(start != n - 1) {
+			temp = start + 1;
 			
-		})
+			while(Math.abs(triangle_area(figure[j - 1], figure[j], figure[temp])) > Math.abs(triangle_area(figure[j - 1], figure[j], figure[temp - 1]))) {
+					temp++;
+					if(temp == n) {
+							break;
+					}
+			}
+			end = temp - 1;
+			
+			for(let k = start; k <= end; k++) {
+				let tempLength = distance(figure[k], figure[j - 1]);
+				if(tempLength > resLength) {
+					resLength = tempLength;
+				}
+			}
+			start = end;
+			j++;			
+		}
+	    return resLength;
+	}
+
+	function distance(a, b) {
+	    return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
 	}
 
 	function checkPerim(hull) {
@@ -248,7 +288,7 @@
 		drawPoints(points);
 		var jar = jarvis(points);
 		drawPolygon(jar);
-		if(checkPerim(jar) > MAX_PERIM){
+		if(findDiam(jar) > 400){
 			console.log(changeDirection(mov));
 			mov = changeDirection(mov);
 			//clearInterval(timer);
