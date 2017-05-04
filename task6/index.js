@@ -192,6 +192,7 @@ function drawRay(point1, point2){
 
 		qh.push(points[leftPos]);
 		qh.push(points[rightPos]);
+		drawRay(points[leftPos], points[rightPos])
 
 		//drawRay(points[leftPos],points[rightPos] )
 		var line = [
