@@ -1,5 +1,5 @@
 'use strict';
-(function(){
+(function() {
 	var c = document.getElementById('canvas');
 	var ctx = c.getContext('2d');
 
@@ -8,27 +8,28 @@
 	const ONE_RADIAN = 57.295779513082;
 	const PI = 3.141592653589793238462643;
 
-	function rand(min, max){
+	function rand(min, max) {
 		return Math.floor(Math.random() * (max - min) + min);
 	}
 
-	function randPoint(){
-		return {x: rand(0+200, document.getElementById('canvas').getAttribute('width')-200),
-				y: rand(0+200, document.getElementById('canvas').getAttribute('height')-200)
-			}
+	function randPoint() {
+		return {
+			x: rand(0 + 200, document.getElementById('canvas').getAttribute('width') - 200),
+			y: rand(0 + 200, document.getElementById('canvas').getAttribute('height') - 200)
+		}
 	}
 
-	function clear(){
+	function clear() {
 		ctx.clearRect(0, 0, c.width, c.height);
 		ctx.beginPath();
-		ctx.moveTo(0,0);
+		ctx.moveTo(0, 0);
 		ctx.closePath();
 	}
 
-	function drawRedPolygon(points){
+	function drawRedPolygon(points) {
 		ctx.beginPath();
-		points.forEach(function(item, index, arr){
-			ctx.strokeStyle="#FF0000";
+		points.forEach(function(item, index, arr) {
+			ctx.strokeStyle = "#FF0000";
 			ctx.lineTo(item.x, item.y);
 
 		});
@@ -36,12 +37,12 @@
 		ctx.stroke();
 	}
 
-	function drawPolygon(points){
+	function drawPolygon(points) {
 		ctx.beginPath();
-		points.forEach(function(item, index, arr){
+		points.forEach(function(item, index, arr) {
 			ctx.font = "1em Arial";
 			ctx.fillStyle = '#11bb11';
-			ctx.strokeStyle="#000";
+			ctx.strokeStyle = "#000";
 			//ctx.fillText(index,item.x,item.y);
 			ctx.lineTo(item.x, item.y);
 
@@ -50,13 +51,13 @@
 		ctx.stroke();
 	}
 
-	function drawPoints(points){
+	function drawPoints(points) {
 		ctx.beginPath();
-		points.forEach(function(item, index, arr){
+		points.forEach(function(item, index, arr) {
 			ctx.font = "1em Arial";
 			ctx.fillStyle = '#11bb11';
-			ctx.strokeStyle="#000";
-			ctx.fillText(index,item.x,item.y);
+			ctx.strokeStyle = "#000";
+			ctx.fillText(index, item.x, item.y);
 			ctx.moveTo(item.x, item.y);
 			ctx.arc(item.x, item.y, 1, 0, 360);
 		});
@@ -71,18 +72,19 @@
 		ctx.closePath();
 		ctx.stroke();
 	}
-	function findBottomPointPosition(points){
+
+	function findBottomPointPosition(points) {
 		var min = 0;
 		points.forEach(function(item, i, arr) {
-			if(arr[min].y <= item.y){
-				if(arr[min].y == item.y){
-					if(arr[min].x > item.x){
+			if (arr[min].y <= item.y) {
+				if (arr[min].y == item.y) {
+					if (arr[min].x > item.x) {
 						min = i;
 					}
 				}
 				min = i;
 			}
-			
+
 		})
 		return min;
 	}
@@ -94,29 +96,29 @@
 		points[0] = tmp;
 	}
 	//векторное произведение
-	function vectorMult(point1, point2){
+	function vectorMult(point1, point2) {
 		return point1.x * point2.x + point1.y * point2.y;
 	}
 	//модуль вектора(длинна)
-	function vectLenght(point){
+	function vectLenght(point) {
 		return Math.sqrt((vectorMult(point, point)));
 	}
 
 	function calcAngle(a, b) {
-        var deltaX, deltaY;
+		var deltaX, deltaY;
 
-        if (!a || !b) return 0;
+		if (!a || !b) return 0;
 
-        deltaX = (b.x - a.x);
-        deltaY = (b.y - a.y);
+		deltaX = (b.x - a.x);
+		deltaY = (b.y - a.y);
 
-        if (deltaX == 0 && deltaY == 0) {
-            return 0;
-        }
+		if (deltaX == 0 && deltaY == 0) {
+			return 0;
+		}
 
-        var angle = Math.atan2(deltaY, deltaX) * ONE_RADIAN;
+		var angle = Math.atan2(deltaY, deltaX) * ONE_RADIAN;
 
-        return angle;
+		return angle;
 	}
 
 	function compareAngles(a, b) {
@@ -127,8 +129,11 @@
 	function sortByAngle(points) {
 		var angles = [];
 		angles = points.map(function(item, i, arr) {
-			if(i != 0)
-				return { angle: calcAngle(arr[0], item), pos:i};
+			if (i != 0)
+				return {
+					angle: calcAngle(arr[0], item),
+					pos: i
+				};
 		});
 		angles.sort(compareAngles);
 		angles.pop();
@@ -140,22 +145,24 @@
 			return points[item.pos];
 		})
 	}
-	
 
-	function det(x1,x2,y1,y2){
-		return x1*y2-x2*y1; 
+
+	function det(x1, x2, y1, y2) {
+		return x1 * y2 - x2 * y1;
 	}
-	function sideOfPoint(det){
-	    if (det > 0)
-	        return -1;
-	    else if (det < 0)
-	        return 1;
-	    else
-	        return 0;
+
+	function sideOfPoint(det) {
+		if (det > 0)
+			return -1;
+		else if (det < 0)
+			return 1;
+		else
+			return 0;
 	}
-	function lineMinusPointSide(line, point){
+
+	function lineMinusPointSide(line, point) {
 		var determ = det(line[1].x - line[0].x, point.x - line[0].x,
-						 line[0].y - line[1].y, line[0].y - point.y);
+			line[0].y - line[1].y, line[0].y - point.y);
 		return (sideOfPoint(determ));
 	}
 
@@ -166,26 +173,26 @@
 		var res = [];
 		res.push(points[0]);
 		res.push(points[1]);
-		while(true){
+		while (true) {
 			var line1 = {
 				x: (res[res.length - 1].x - res[res.length - 2].x),
 				y: (res[res.length - 1].y - res[res.length - 2].y)
 			}
 			var min = -Infinity,
-			minPos = 0;
-			points.forEach(function(item, i, arr){
+				minPos = 0;
+			points.forEach(function(item, i, arr) {
 				var line2 = {
 					x: (item.x - res[res.length - 1].x),
 					y: (item.y - res[res.length - 1].y)
 				}
-				if((vectorMult(line1, line2) / ( vectLenght(line1) , vectLenght(line2))) > min){
-					min = (vectorMult(line1, line2) /( vectLenght(line1) , vectLenght(line2)));
+				if ((vectorMult(line1, line2) / (vectLenght(line1), vectLenght(line2))) > min) {
+					min = (vectorMult(line1, line2) / (vectLenght(line1), vectLenght(line2)));
 					minPos = i;
 				}
 			})
 
-			if(res.indexOf(points[minPos]) != -1) break;
-			
+			if (res.indexOf(points[minPos]) != -1) break;
+
 			res.push(points[minPos]);
 		}
 		return res;
@@ -193,7 +200,10 @@
 
 	function movePoints(points) {
 		var res = points.map(function(item, i) {
-			return {x:item.x + Math.cos(mov[i]), y:item.y + Math.sin(mov[i])};
+			return {
+				x: item.x + Math.cos(mov[i]),
+				y: item.y + Math.sin(mov[i])
+			};
 		});
 
 		return res;
@@ -201,7 +211,7 @@
 
 	function genSpeed(length) {
 		var mov = [];
-		for(var i=0;i<length;++i){
+		for (var i = 0; i < length; ++i) {
 			mov.push(radian(rand(0, 360)));
 		}
 		return mov;
@@ -209,60 +219,66 @@
 
 	function changeDirection(mov) {
 		return mov.map(function(item) {
-			return item + PI ;
+			return item + PI;
 		})
 	}
 
 	function triangle_area(first, second, third) {
-	    let a = distance(first, second);
-	    let b = distance(second, third);
-	    let c = distance(first, third);
-	    let p = (a + b + c) / 2;
+		let a = distance(first, second);
+		let b = distance(second, third);
+		let c = distance(first, third);
+		let p = (a + b + c) / 2;
 
-	    return Math.sqrt(p * (p - a) * (p - b) * (p - c));
+		return Math.sqrt(p * (p - a) * (p - b) * (p - c));
 	}
 
 	function findDiam(figure) {
-		let n = figure.length - 1, i = 1, end, start, temp;
+		let n = figure.length - 1,
+			i = 1,
+			end, start, temp;
 		let resLength = 0;
-		while(Math.abs(triangle_area(figure[n - 1], figure[0], figure[i])) > Math.abs(triangle_area(figure[n - 1], figure[0], figure[i - 1]))) {
-			i++;
+		while (Math.abs(triangle_area(figure[n - 1], figure[0],
+				figure[i])) > Math.abs(triangle_area(figure[n - 1],
+				figure[0], figure[i - 1]))) {
+			++i;
 		}
 
 		start = i - 1;
 		let j = 1;
-		while(start != n - 1) {
+		while (start != n - 1) {
 			temp = start + 1;
-			
-			while(Math.abs(triangle_area(figure[j - 1], figure[j], figure[temp])) > Math.abs(triangle_area(figure[j - 1], figure[j], figure[temp - 1]))) {
-					temp++;
-					if(temp == n) {
-							break;
-					}
+
+			while (Math.abs(triangle_area(figure[j - 1], figure[j], figure[temp])) >
+				Math.abs(triangle_area(figure[j - 1], figure[j], figure[temp - 1]))
+			) {
+				temp++;
+				if (temp == n) {
+					break;
+				}
 			}
 			end = temp - 1;
-			
-			for(let k = start; k <= end; k++) {
+
+			for (let k = start; k <= end; k++) {
 				let tempLength = distance(figure[k], figure[j - 1]);
-				if(tempLength > resLength) {
+				if (tempLength > resLength) {
 					resLength = tempLength;
 				}
 			}
 			start = end;
-			j++;			
+			j++;
 		}
-	    return resLength;
+		return resLength;
 	}
 
 	function distance(a, b) {
-	    return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
+		return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
 	}
 
 	function checkPerim(hull) {
 		var perim = 0;
 		hull.forEach(function(item, i, arr) {
-			var x = arr[i%arr.length].x - arr[(i+1)%arr.length].x;
-			var y = arr[i%arr.length].y - arr[(i+1)%arr.length].y;
+			var x = arr[i % arr.length].x - arr[(i + 1) % arr.length].x;
+			var y = arr[i % arr.length].y - arr[(i + 1) % arr.length].y;
 			perim += Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 		});
 		return perim;
@@ -274,7 +290,7 @@
 	}
 	var points = [];
 	var container = [];
-	for(var i=0;i<7;++i){
+	for (var i = 0; i < 7; ++i) {
 		points.push(randPoint());
 	}
 	drawPoints(points);
@@ -282,13 +298,13 @@
 	var mov = genSpeed(points.length);
 
 	var fps = 50;
-	var timer = setInterval( function(){
+	var timer = setInterval(function() {
 		points = movePoints(points);
 		clear();
 		drawPoints(points);
 		var jar = jarvis(points);
 		drawPolygon(jar);
-		if(findDiam(jar) > 400){
+		if (findDiam(jar) > 500) {
 			console.log(changeDirection(mov));
 			mov = changeDirection(mov);
 			//clearInterval(timer);
@@ -298,4 +314,4 @@
 
 	//drawPolygon(jarvis(points));
 
-})()	
+})()
