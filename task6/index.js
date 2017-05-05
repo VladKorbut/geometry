@@ -209,9 +209,7 @@ function drawRay(point1, point2){
 		});
 		qh = qhull(points[leftPos], points[rightPos], top, qh);
 
-		qh = qhull(points[rightPos], points[leftPos],  bottom, qh);
-
-		qh = sortByAngle(qh);
+		qh = qhull(points[rightPos], points[leftPos], bottom, qh);
 
 		qh = sortByAngle(qh);
 		//drawPolygon(qh);
@@ -235,6 +233,7 @@ function drawRay(point1, point2){
 		var pos = 0;
 		points.forEach(function(item, i, arr){
 			if(triangleArea(left, right, item) > area){
+				area = triangleArea(left, right, item);
 				pos = i;
 			}	
 		});
@@ -363,7 +362,7 @@ function drawRay(point1, point2){
 	}
 	var points = [];
 	var container = [];
-	for (var i = 0; i < 7; ++i) {
+	for (var i = 0; i < 17; ++i) {
 		points.push(randPoint());
 	}
 	drawPoints(points);
@@ -381,7 +380,7 @@ function drawRay(point1, point2){
 		drawPoints(points);
 		var hull = quickHull(points);
 		drawPolygon(hull);
-		if (checkPerim(hull) > 1000) {
+		if (checkPerim(hull) > 1400) {
 			console.log(changeDirection(mov));
 			mov = changeDirection(mov);
 			//clearInterval(timer);
