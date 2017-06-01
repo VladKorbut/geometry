@@ -64,10 +64,14 @@ function drawPolygon(points) {
         ctx.strokeStyle = "#000";
         //ctx.fillText(index,item.x,item.y);
         ctx.lineTo(item.x, item.y);
-
     });
     ctx.closePath();
-    ctx.stroke();
+    //ctx.stroke();
+    ctx.fillStyle = 'rgb('+
+	    Math.floor(Math.random()*128 + 128)+','+
+	    Math.floor(Math.random()*256)+','+
+	    Math.floor(Math.random()*128 + 128)+')';
+    ctx.fill();
 }
 
 function drawRay(point1, point2) {
@@ -219,17 +223,18 @@ function trinagulation(points, point1, point2) {
 }
 
 var tri = []; //глабальная пирименная, все в лучших традициях
-var points = genRandPointSet(10); //генерим 10 точек
+var points = genRandPointSet(2000); //генерим 10 точек
 points = sortByY(points); //сортируем их по оси Y
 points = addPositions(points); //добавляем каждой точке ее позицию(так намного удобнее лично мне)
 //drawPoints(points);
 startTriangulation(points); //поехали
 
 
-
-tri.forEach(function(item) {
-    var pol = item.map(function(item) {
-        return points[item];
-    })
-    drawPolygon(pol)
-})
+setInterval(function() {
+	tri.forEach(function(item) {
+	    var pol = item.map(function(item) {
+	        return points[item];
+	    })
+	    drawPolygon(pol)
+	})
+}, 1000/60)
