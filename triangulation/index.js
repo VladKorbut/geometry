@@ -1,6 +1,8 @@
 'use strict';
 var c = document.getElementById('canvas');
 var ctx = c.getContext('2d');
+c.width = window.innerWidth;
+c.height = window.innerHeight;
 
 function rand(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
