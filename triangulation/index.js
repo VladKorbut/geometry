@@ -6,9 +6,8 @@ function rand(min, max) {
 	return Math.floor(Math.random() * (max - min) + min);
 }
 
-function randPoint(pos, width, height) {
+function randPoint(width, height) {
 	return {
-		pos: pos,
 		x: rand(0, width),
 		y: rand(0, height)
 	}
@@ -20,7 +19,7 @@ function drawPoints(points) {
 		ctx.font = "1em Arial";
 		ctx.fillStyle = '#11bb11';
 		ctx.strokeStyle = "#000";
-		ctx.fillText(index, item.x, item.y);
+		//ctx.fillText(index, item.x, item.y);
 		ctx.moveTo(item.x, item.y);
 		ctx.arc(item.x, item.y, 1, 0, 360);
 	});
@@ -30,10 +29,16 @@ function drawPoints(points) {
 
 function genRandPointSet(size){
 	var points = [];
+	points.push({x:0,y:0});
+	points.push({x:0,y:(document.getElementById('canvas').getAttribute('height')-1)});
+	points.push({x:(document.getElementById('canvas').getAttribute('width')-1),y:0});
+	points.push({
+		x:(document.getElementById('canvas').getAttribute('width')-1),
+		y:(document.getElementById('canvas').getAttribute('height')-1)
+	})
 	for(var i=0;i<size;++i){
 		points.push(
 			randPoint(
-				i,
 				document.getElementById('canvas').getAttribute('width'),
 				document.getElementById('canvas').getAttribute('height')
 			)
@@ -43,11 +48,14 @@ function genRandPointSet(size){
 }
 
 function sortByY(points){
-	var sorted = points.sort(function(a, b){
-		return a.y < b.y;
-	})
-	var i=0;
-	return sorted.map(function(item) {
+	return points.sort(function(a, b){
+		return b.y -  a.y;
+	});
+}
+
+function addPositions(points) {
+	var i = 0;
+	return points.map(function(item) {
 		return {
 			pos: i++,
 			x:item.x,
@@ -155,7 +163,6 @@ function trinagulation(points, point1, point2) {
 		}
 	});
 
-	console.log(point1.pos, point2.pos, higher)
 	if(higher.length == 1){
 		let triangle = sortByEncreasing([point1.pos, point2.pos, higher[0].pos]);
 		if(!triangleExist(triangle)){
@@ -170,7 +177,6 @@ function trinagulation(points, point1, point2) {
 		if(higher.length > 1){
 			var point = findNearestPoint(higher, point1, point2);
 			let triangle = sortByEncreasing([point1.pos, point2.pos, higher[point].pos]);
-			//console.log(triangle, tri)
 			if(!triangleExist(triangle)){
 				tri.push(triangle);
 				trinagulation(points, point1, higher[point]);
@@ -209,13 +215,15 @@ function indexOfPoint(arr, pos){
 
 var tri =[];
 
-var points = sortByY(genRandPointSet(10));
-console.log(points);
+var points = genRandPointSet(280);
+points = sortByY(points);
+points = addPositions(points);
 drawPoints(points);
 startTriangulation(points);
-console.log(tri)
+
+
+
 tri.forEach(function(item) {
-	console.log(item)
 	var pol = item.map(function(item) {
 		return points[item];
 	})
@@ -226,7 +234,6 @@ function drawPolygon(points) {
 		ctx.beginPath();
 		points.forEach(function(item, index, arr) {
 			ctx.font = "1em Arial";
-			ctx.fillStyle = '#11bb11';
 			ctx.strokeStyle = "#000";
 			//ctx.fillText(index,item.x,item.y);
 			ctx.lineTo(item.x, item.y);
