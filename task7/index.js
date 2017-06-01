@@ -60,7 +60,7 @@
 			ctx.font = "1em Arial";
 			ctx.fillStyle = '#11bb11';
 			ctx.strokeStyle = "#000";
-			ctx.fillText(index, item.x, item.y);
+			//ctx.fillText(index, item.x, item.y);
 			ctx.moveTo(item.x, item.y);
 			ctx.arc(item.x, item.y, 1, 0, 360);
 		});
@@ -245,6 +245,9 @@
 	}
 
 	function checkHull(event) {
+		allPoints.push({x:event.layerX, y:event.layerY});
+		
+		drawPoints(allPoints);
 		points = dynHull(points, {x:event.layerX, y:event.layerY});
 		clear();
 		drawPolygon(points);
@@ -301,10 +304,14 @@
 	}
 
 	var points = [];
+	var allPoints = [];
 	for(var i=0;i<3;++i){
 		points.push(randPoint());
 	}
 	points = sortByAngle(points);
+	allPoints = points.map(function(item) {
+		return item;
+	});
 
 	drawPolygon(points);
 
