@@ -225,18 +225,20 @@ function trinagulation(points, point1, point2) {
 }
 
 var tri = []; //глабальная пирименная, все в лучших традициях
-var points = genRandPointSet(2000); //генерим 10 точек
-points = sortByY(points); //сортируем их по оси Y
-points = addPositions(points); //добавляем каждой точке ее позицию(так намного удобнее лично мне)
-//drawPoints(points);
-startTriangulation(points); //поехали
+//поехали
 
 
-setInterval(function() {
+(function loop() {
+	var points = genRandPointSet(100); //генерим 10 точек
+	points = sortByY(points); //сортируем их по оси Y
+	points = addPositions(points); //добавляем каждой точке ее позицию(так намного удобнее лично мне)
+	//drawPoints(points);
+	startTriangulation(points)
 	tri.forEach(function(item) {
 	    var pol = item.map(function(item) {
 	        return points[item];
 	    })
 	    drawPolygon(pol)
 	})
-}, 1000/60)
+	requestAnimationFrame(loop);
+})();
